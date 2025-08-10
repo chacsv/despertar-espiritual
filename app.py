@@ -1,16 +1,28 @@
-from bottle import Bottle, run
-import os
+from bottle import Bottle, run, template
 
 app = Bottle()
 
+# Ruta principal
 @app.route('/')
-def inicio():
-    return "<h1>Bienvenido a mi página de oración</h1><p>Dios te bendiga</p>"
+def home():
+    return template("""
+        <h1>Bienvenido a mi página de oración</h1>
+        <p>Dios te bendiga. Este es un espacio para interceder y compartir sobre un despertar espiritual.</p>
+        <a href="/historia">Ver historia de movimientos de oración</a>
+    """)
 
+# Página de historia
 @app.route('/historia')
 def historia():
-    return "<h1>Historia de los movimientos de oración</h1><p>Aquí hablaremos de grandes avivamientos y despertares espirituales.</p>"
+    return template("""
+        <h1>Historia de los movimientos de oración</h1>
+        <p>Desde tiempos bíblicos hasta la actualidad, Dios ha levantado movimientos de oración que han impactado
+        ciudades, naciones y generaciones.</p>
+        <a href="/">Volver al inicio</a>
+    """)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))  # Usa el puerto que Render asigna
-    run(app, host="0.0.0.0", port=port, debug=True)
+    # En Render se usa el puerto que da la variable de entorno PORT
+    import os
+    port = int(os.environ.get("PORT", 8080))
+    run(app, host='0.0.0.0', port=port, debug=True, reloader=True)
